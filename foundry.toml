@@ -1,0 +1,10 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+via-ir = true
+optimizer = true
+optimizer-runs = 200
+
+[rpc_endpoints]
+bsc = "https://bsc-dataseed.binance.org/"

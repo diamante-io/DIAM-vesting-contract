@@ -1,0 +1,947 @@
+// // SPDX-License-Identifier: MIT
+// pragma solidity ^0.8.19;
+
+// import {Test} from "../lib/forge-std/src/Test.sol";
+// import "../src/DIAMVesting.sol";
+// import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+// import {console} from "../lib/forge-std/src/console.sol";
+
+// contract MockERC20 is ERC20 {
+//     address public admin = address(1);
+//     constructor() ERC20("MockToken", "MTK") {
+//         _mint(admin, 1_000_000 ether);
+//     }
+// }
+
+// contract DIAMVestingTest is Test {
+
+//     DIAMVesting public vesting;
+//     MockERC20 public token;
+//     address public admin = address(1);
+//     address public beneficiary = address(2);
+//     // function setUp() public {
+//     //     token = new MockERC20();
+//     //     vesting = new DIAMVesting(address(token));
+
+//     //     vm.prank(admin);
+//     //     vesting.grantRole(vesting.ADMIN_ROLE(), admin);
+//     //     token.approve(address(vesting), type(uint256).max);
+//     // }
+//     function setUp() public {
+//     // Deploy MockERC20 token
+//     token = new MockERC20();
+
+//     // Deploy DIAMVesting contract
+//     vesting = new DIAMVesting(address(token));
+
+//     // Grant ADMIN_ROLE to the admin account
+//     vm.prank(admin);
+//     vesting.grantRole(vesting.ADMIN_ROLE(), admin);
+
+//     // Approve the vesting contract to spend tokens on behalf of the admin
+//     vm.prank(admin);
+//     token.approve(address(vesting), type(uint256).max);
+
+//     // Verify that the admin has sufficient allowance
+//     console.log("Allowance set:", token.allowance(admin, address(vesting)));
+// }
+
+// //   function testCreateBatchVestingSchedules() public {
+// //     // Create batch vesting params
+// //         DIAMVesting.BatchVestingParams[] memory params = new DIAMVesting.BatchVestingParams[](2);
+
+// //     params[0] = DIAMVesting.BatchVestingParams({
+// //         beneficiary: beneficiary,
+// //         totalAmount: 100 ether,
+// //         cliffPeriod: 3,
+// //         vestingPeriod: 12,
+// //         vestingType: DIAMVesting.VestingType.SimpleCliff,
+// //         releasePercentage: 10
+// //     });
+// //     params[1] = DIAMVesting.BatchVestingParams({
+// //         beneficiary: address(3),
+// //         totalAmount: 200 ether,
+// //         cliffPeriod: 6,
+// //         vestingPeriod: 24,
+// //         vestingType: DIAMVesting.VestingType.LinearCliff,
+// //         releasePercentage: 20
+// //     });
+
+// //     // Log token balances for debugging
+// //     console.log("Admin balance before:", token.balanceOf(admin));
+
+// //     // Create batch vesting schedules
+// //     vm.prank(admin);
+// //     vesting.createBatchVestingSchedules(params);
+
+// //     // Verify the schedules
+// //     uint256[] memory schedules = vesting.getBeneficiarySchedules(beneficiary);
+// //     assertEq(schedules.length, 1);
+
+// //     DIAMVesting.VestingSchedule memory schedule = vesting.getVestingSchedule(schedules[0]);
+// //     assertEq(schedule.totalAmount, 100 ether);
+// //     assertEq(schedule.cliffPeriod, 3);
+// //     assertEq(schedule.vestingPeriod, 12);
+// //     assertEq(schedule.releasePercentage, 10);
+// //     assertEq(schedule.beneficiary, beneficiary);
+// // }
+
+//     // function testProcessTokenReleases() public {
+//     //     DIAMVesting.BatchVestingParams[] memory params = new DIAMVesting.BatchVestingParams[](1);
+//     //     params[0] = DIAMVesting.BatchVestingParams({
+//     //         beneficiary: beneficiary,
+//     //         totalAmount: 100 ether,
+//     //         cliffPeriod: 1,
+//     //         vestingPeriod: 12,
+//     //         vestingType: DIAMVesting.VestingType.SimpleCliff,
+//     //         releasePercentage: 10
+//     //     });
+
+//     //     vm.prank(admin);
+//     //     vesting.createBatchVestingSchedules(params);
+
+//     //     uint256[] memory schedules = vesting.getBeneficiarySchedules(beneficiary);
+//     //     uint256 scheduleId = schedules[0];
+
+//     //     // Fast forward time past the cliff period
+//     //     vm.warp(block.timestamp + 30 days * 3);
+
+//     //     vm.prank(admin);
+//     //     vesting.processTokenReleases(schedules);
+
+//     //     DIAMVesting.VestingSchedule memory schedule = vesting.getVestingSchedule(scheduleId);
+//     //     assertGt(schedule.releasedAmount, 0);
+//     // }
+
+//     // function testPartialRevoke() public {
+//     //     DIAMVesting.BatchVestingParams[] memory params = new DIAMVesting.BatchVestingParams[](1);
+//     //     params[0] = DIAMVesting.BatchVestingParams({
+//     //         beneficiary: beneficiary,
+//     //         totalAmount: 100 ether,
+//     //         cliffPeriod: 1,
+//     //         vestingPeriod: 12,
+//     //         vestingType: DIAMVesting.VestingType.SimpleCliff,
+//     //         releasePercentage: 10
+//     //     });
+
+//     //     vm.prank(admin);
+//     //     vesting.createBatchVestingSchedules(params);
+
+//     //     uint256[] memory schedules = vesting.getBeneficiarySchedules(beneficiary);
+//     //     uint256 scheduleId = schedules[0];
+
+//     //     vm.prank(admin);
+//     //     vesting.partialRevoke(scheduleId, 50 ether);
+
+//     //     DIAMVesting.VestingSchedule memory schedule = vesting.getVestingSchedule(scheduleId);
+//     //     assertEq(schedule.totalAmount, 50 ether);
+//     // }
+
+//     // function testFullRevoke() public {
+//     //     DIAMVesting.BatchVestingParams[] memory params = new DIAMVesting.BatchVestingParams[](1);
+//     //     params[0] = DIAMVesting.BatchVestingParams({
+//     //         beneficiary: beneficiary,
+//     //         totalAmount: 100 ether,
+//     //         cliffPeriod: 1,
+//     //         vestingPeriod: 12,
+//     //         vestingType: DIAMVesting.VestingType.SimpleCliff,
+//     //         releasePercentage: 10
+//     //     });
+
+//     //     vm.prank(admin);
+//     //     vesting.createBatchVestingSchedules(params);
+
+//     //     uint256[] memory schedules = vesting.getBeneficiarySchedules(beneficiary);
+//     //     uint256 scheduleId = schedules[0];
+
+//     //     vm.prank(admin);
+//     //     vesting.revokeSchedule(scheduleId);
+
+//     //     DIAMVesting.VestingSchedule memory schedule = vesting.getVestingSchedule(scheduleId);
+//     //     assertFalse(schedule.isActive);
+//     // }
+
+//     /**
+//      * @dev Test processing token releases after the cliff period
+//      */
+//     function testProcessTokenReleases() public {
+//         // Create a vesting schedule for the beneficiary
+//         // DIAMVesting.BatchVestingParams;
+//                 // vm.warp(block.timestamp + 31 days * 12);
+
+// DIAMVesting.BatchVestingParams[] memory params = new DIAMVesting.BatchVestingParams[](1);
+
+//         params[0] = DIAMVesting.BatchVestingParams({
+//             beneficiary: beneficiary,
+//             totalAmount: 100 ether,
+//             cliffPeriod: 1, // 1-month cliff
+//             vestingPeriod: 12,
+//             vestingType: DIAMVesting.VestingType.SimpleCliff,
+//             releasePercentage: 10
+//         });
+
+//         vm.prank(admin);
+//         vesting.createBatchVestingSchedules(params);
+
+//         uint256[] memory schedules = vesting.getBeneficiarySchedules(beneficiary);
+//         uint256 scheduleId = schedules[0];
+// console.log(scheduleId);
+//         // Fast forward time past the cliff period (1 month)
+//         vm.warp(block.timestamp + 31 days * 3);
+
+//         // Process token releases
+//         vm.prank(beneficiary);
+//         vesting.processTokenReleases(schedules);
+
+//         // Verify tokens have been released
+//         DIAMVesting.VestingSchedule memory schedule = vesting.getVestingSchedule(scheduleId);
+//         console.log(schedule.releasedAmount);
+//         assertGt(schedule.releasedAmount, 0);
+//     }
+
+//     /**
+//      * @dev Test partial revocation of a vesting schedule
+//      */
+//     // function testPartialRevoke() public {
+//     //     // Create a vesting schedule for the beneficiary
+//     //                  DIAMVesting.BatchVestingParams[] memory params = new DIAMVesting.BatchVestingParams[](1);
+
+//     //     params[0] = DIAMVesting.BatchVestingParams({
+//     //         beneficiary: beneficiary,
+//     //         totalAmount: 100 ether,
+//     //         cliffPeriod: 1,
+//     //         vestingPeriod: 12,
+//     //         vestingType: DIAMVesting.VestingType.SimpleCliff,
+//     //         releasePercentage: 10
+//     //     });
+
+//     //     vm.prank(admin);
+//     //     vesting.createBatchVestingSchedules(params);
+
+//     //     uint256[] memory schedules = vesting.getBeneficiarySchedules(beneficiary);
+//     //     uint256 scheduleId = schedules[0];
+
+//     //     // Partially revoke the schedule
+//     //     vm.prank(admin);
+//     //     vesting.partialRevoke(scheduleId, 50 ether);
+
+//     //     // Verify the updated schedule
+//     //     DIAMVesting.VestingSchedule memory schedule = vesting.getVestingSchedule(scheduleId);
+//     //     assertEq(schedule.totalAmount, 50 ether);
+//     // }
+
+//     /**
+//      * @dev Test full revocation of a vesting schedule
+//      */
+//     // function testFullRevoke() public {
+//     //     // Create a vesting schedule for the beneficiary
+//     //             DIAMVesting.BatchVestingParams[] memory params = new DIAMVesting.BatchVestingParams[](1);
+//     //     params[0] = DIAMVesting.BatchVestingParams({
+//     //         beneficiary: beneficiary,
+//     //         totalAmount: 100 ether,
+//     //         cliffPeriod: 1,
+//     //         vestingPeriod: 12,
+//     //         vestingType: DIAMVesting.VestingType.SimpleCliff,
+//     //         releasePercentage: 10
+//     //     });
+
+//     //     vm.prank(admin);
+//     //     vesting.createBatchVestingSchedules(params);
+
+//     //     uint256[] memory schedules = vesting.getBeneficiarySchedules(beneficiary);
+//     //     uint256 scheduleId = schedules[0];
+
+//     //     // Fully revoke the schedule
+//     //     vm.prank(admin);
+//     //     vesting.revokeSchedule(scheduleId);
+
+//     //     // Verify the schedule is inactive
+//     //     DIAMVesting.VestingSchedule memory schedule = vesting.getVestingSchedule(scheduleId);
+//     //     assertFalse(schedule.isActive);
+//     // }
+// }
+
+pragma solidity ^0.8.19;
+
+import {Test} from "../lib/forge-std/src/Test.sol";
+import "../src/DIAMVesting.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {console} from "../lib/forge-std/src/console.sol";
+
+// Mock ERC20 Token for testing purposes
+contract MockERC20 is ERC20 {
+    address public admin = address(1);
+
+    constructor() ERC20("MockToken", "MTK") {
+        _mint(admin, 1_000_000 ether); // Mint 1,000,000 tokens to admin for testing
+    }
+}
+
+contract DIAMVestingTest is Test {
+    DIAMVesting public vesting;
+    MockERC20 public token;
+    address public _InitAdmin = address(1);
+    address public admin = address(2);
+    address public beneficiary = address(3);
+
+    // function setUp() public {
+    //     // Deploy MockERC20 token
+    //     token = new MockERC20();
+
+    //     // Deploy DIAMVesting contract
+    //     vesting = new DIAMVesting(address(token));
+
+    //     // Grant ADMIN_ROLE to the admin account
+    //     vm.prank(admin);
+    //     console.log(token.balanceOf(admin), " < - - -");
+    //     vesting.grantRole(vesting.ADMIN_ROLE(), admin);
+    //     token.transfer(beneficiary, 2000000000000000000);
+    //     token.approve(address(vesting), type(uint256).max);
+
+    //     console.log(token.balanceOf(beneficiary), " < ======================= balance ======================", vesting.hasRole(vesting.ADMIN_ROLE(), beneficiary));
+
+    //     // Approve the vesting contract to spend tokens on behalf of the admin
+
+    //             vm.prank(beneficiary);
+    //                     token.approve(address(vesting),2 ether );
+
+    //     // Verify that the admin has sufficient allowance
+    //     console.log("Allowance set:", token.allowance(admin, address(vesting)));
+    // }
+
+    function setUp() public {
+
+        // console.log();
+        // Deploy MockERC20 token
+            // vm.prank(admin); // Set admin as deployer
+    vm.prank(_InitAdmin); // Set admin as deployer
+
+        token = new MockERC20();
+
+    vm.prank(_InitAdmin); // Set admin as deployer
+
+        // Deploy DIAMVesting contract
+        vesting = new DIAMVesting(address(token));
+  console.log(
+            vesting.owner(),
+            " ICP PPPPPPPPPP"
+        );
+        // Set up admin and grant roles
+        // vm.prank(_InitAdmin);
+        // vesting.transferOwnership(admin);
+
+        
+       vm.prank(address(0));
+        token.transfer(_InitAdmin, token.balanceOf(address(0)));
+
+        vm.prank(_InitAdmin);
+        token.approve(address(vesting), type(uint256).max);
+
+        //  vm.prank(admin);
+        // vesting.changeAccess(address (10));
+
+
+        // admin = address(10);
+        console.log("Admin Balance:", token.balanceOf(_InitAdmin));
+
+        // Simulate token transfer from admin to beneficiary
+        // vm.prank(_InitAdmin);
+        // token.transfer(beneficiary, 2 ether);
+
+        // // Simulate beneficiary approval to vesting contract
+        // vm.prank(beneficiary);
+        // token.approve(address(vesting), 2 ether);
+
+        // Log balances and allowance for debugging
+        console.log("Admin Balance:", token.balanceOf(admin));
+        console.log("Beneficiary Balance:", token.balanceOf(beneficiary));
+        console.log(
+            "Allowance (Beneficiary -> Vesting):",
+            token.allowance(beneficiary, address(vesting))
+        );
+    //   vesting.getRoleAdmin(vesting.DEFAULT_ADMIN_ROLE())
+        // console.log();
+
+    }
+
+    /**
+     * @dev Test creating batch vesting schedules
+    //  */
+//     function testCreateBatchVestingSchedules() public {
+//                 DIAMVesting.BatchVestingParams[] memory params = new DIAMVesting.BatchVestingParams[](2);
+
+//         params[0] = DIAMVesting.BatchVestingParams({
+//             beneficiary: beneficiary,
+//             totalAmount: 100 ether,
+//             cliffPeriod: 3,
+//             vestingPeriod: 12,
+//             vestingType: DIAMVesting.VestingType.SimpleCliff,
+//             releasePercentage: 10
+//         });
+//     params[1] = DIAMVesting.BatchVestingParams({
+//         beneficiary: address(4),
+//         totalAmount: 200 ether,
+//         cliffPeriod: 6,
+//         vestingPeriod: 24,
+//         vestingType: DIAMVesting.VestingType.LinearCliff,
+//         releasePercentage: 20
+//     });
+
+//         // Log token balances for debugging
+//         console.log("Admin balance before:", token.balanceOf(_InitAdmin));
+
+//         // Create batch vesting schedules
+//         vm.prank(_InitAdmin);
+//         vesting.createBatchVestingSchedules(params);
+
+//         // Verify the schedules for the first beneficiary
+//         uint256[] memory schedules = vesting.getBeneficiarySchedules(beneficiary);
+//         assertEq(schedules.length, 1);
+
+//         // DIAMVesting.VestingSchedule memory schedule = vesting.getVestingSchedule(schedules[0]);
+//         (
+//     uint256 _scheduleId,
+//     address _beneficiary,
+//     uint256 totalAmount,
+//     uint256 cliffPeriod,
+//     uint256 vestingPeriod,
+//     DIAMVesting.VestingType vestingType,
+//     uint256 releasePercentage,
+//     uint256 startTime,
+//     uint256 releasedAmount,
+//     bool isActive,
+//     uint256 lastProcessedDay
+// ) = vesting.vestingSchedules(schedules[0]);
+
+// DIAMVesting.VestingSchedule memory schedule = DIAMVesting.VestingSchedule({
+//     scheduleId: _scheduleId,
+//     beneficiary: _beneficiary,
+//     totalAmount: totalAmount,
+//     cliffPeriod: cliffPeriod,
+//     vestingPeriod: vestingPeriod,
+//     vestingType: vestingType,
+//     releasePercentage: releasePercentage,
+//     startTime: startTime,
+//     releasedAmount: releasedAmount,
+//     isActive: isActive,
+//     lastProcessedDay: lastProcessedDay
+// });
+//         assertEq(schedule.totalAmount, 100 ether);
+//         assertEq(schedule.cliffPeriod, 3);
+//         assertEq(schedule.vestingPeriod, 12);
+//         assertEq(schedule.releasePercentage, 10);
+//         assertEq(schedule.beneficiary, beneficiary);
+//     }
+
+    /**
+ * @dev Test processing token releases after the cliff period
+ */
+function testProcessTokenReleases() public {
+    // Define batch vesting parameters
+                DIAMVesting.BatchVestingParams[] memory params = new DIAMVesting.BatchVestingParams[](2);
+    params[0] = DIAMVesting.BatchVestingParams({
+        beneficiary: beneficiary,
+        totalAmount: 10 ether, // Total amount of tokens for vesting
+        cliffPeriod: 1,        // 1-month cliff
+        vestingPeriod: 12,     // 12 months total vesting period
+        vestingType: DIAMVesting.VestingType.SimpleCliff,
+        releasePercentage: 10  // 10% released at each interval
+    });
+
+    // Log initial admin balance for debugging
+    console.log(token.balanceOf(_InitAdmin), "Admin balance before vesting");
+
+    // Create batch vesting schedules
+    vm.prank(_InitAdmin); // Set the sender as admin
+    vesting.createBatchVestingSchedules(params);
+
+    // Retrieve the schedule for the beneficiary
+    uint256[] memory schedules = vesting.getBeneficiarySchedules(beneficiary);
+    uint256 scheduleId = schedules[0];
+    console.log("Schedule ID:", scheduleId);
+
+    // Fast forward time past the cliff period (1 month)
+    vm.warp(block.timestamp + 31 days); // Move the block timestamp forward by 31 days
+
+    // Process token releases
+    vm.prank(_InitAdmin); // Set the sender as admin for processing releases
+    vesting.processTokenReleases(schedules);
+
+    // Fetch the updated schedule details
+(
+    uint256 _scheduleId,
+    address _beneficiary,
+    uint256 totalAmount,
+    uint256 cliffPeriod,
+    uint256 vestingPeriod,
+    DIAMVesting.VestingType vestingType,
+    uint256 releasePercentage,
+    uint256 startTime,
+    uint256 releasedAmount,
+    bool isActive,
+    uint256 lastProcessedDay
+) = vesting.vestingSchedules(scheduleId);
+
+DIAMVesting.VestingSchedule memory schedule = DIAMVesting.VestingSchedule({
+    scheduleId: _scheduleId,
+    beneficiary: _beneficiary,
+    totalAmount: totalAmount,
+    cliffPeriod: cliffPeriod,
+    vestingPeriod: vestingPeriod,
+    vestingType: vestingType,
+    releasePercentage: releasePercentage,
+    startTime: startTime,
+    releasedAmount: releasedAmount,
+    isActive: isActive,
+    lastProcessedDay: lastProcessedDay
+});
+    // Log the released amount for debugging
+    console.log("Released Amount:", schedule.releasedAmount);
+
+    // Assertions to validate expected behavior
+    assertGt(schedule.releasedAmount, 0); // Ensure some tokens are released
+    assertEq(
+        token.balanceOf(beneficiary),
+        schedule.releasedAmount,
+        "Released amount should match beneficiary's token balance"
+    );
+
+    // Log the beneficiary's balance
+    console.log("Beneficiary balance:", token.balanceOf(beneficiary));
+}
+
+
+//     /**
+//      * @dev Test partial revocation of a vesting schedule
+//      */
+//     function testPartialRevoke() public {
+//                 DIAMVesting.BatchVestingParams[] memory params = new DIAMVesting.BatchVestingParams[](1);
+//         params[0] = DIAMVesting.BatchVestingParams({
+//             beneficiary: beneficiary,
+//             totalAmount: 100 ether,
+//             cliffPeriod: 1,
+//             vestingPeriod: 12,
+//             vestingType: DIAMVesting.VestingType.SimpleCliff,
+//             releasePercentage: 10
+//         });
+
+
+
+
+//         // Create batch vesting schedules
+//         vm.prank(_InitAdmin);
+//         vesting.createBatchVestingSchedules(params);
+
+//         uint256[] memory schedules = vesting.getBeneficiarySchedules(beneficiary);
+//         uint256 scheduleId = schedules[0];
+
+//         // Partially revoke the schedule (reduce total amount by 50 ether)
+//         vm.prank(_InitAdmin);
+//         vesting.partialRevoke(scheduleId, 50 ether);
+
+//         // Verify the updated schedule
+//         // DIAMVesting.VestingSchedule memory schedule = vesting.getVestingSchedule(scheduleId);
+//         (
+//     uint256 _scheduleId,
+//     address _beneficiary,
+//     uint256 totalAmount,
+//     uint256 cliffPeriod,
+//     uint256 vestingPeriod,
+//     DIAMVesting.VestingType vestingType,
+//     uint256 releasePercentage,
+//     uint256 startTime,
+//     uint256 releasedAmount,
+//     bool isActive,
+//     uint256 lastProcessedDay
+// ) = vesting.vestingSchedules(scheduleId);
+
+// DIAMVesting.VestingSchedule memory schedule = DIAMVesting.VestingSchedule({
+//     scheduleId: _scheduleId,
+//     beneficiary: _beneficiary,
+//     totalAmount: totalAmount,
+//     cliffPeriod: cliffPeriod,
+//     vestingPeriod: vestingPeriod,
+//     vestingType: vestingType,
+//     releasePercentage: releasePercentage,
+//     startTime: startTime,
+//     releasedAmount: releasedAmount,
+//     isActive: isActive,
+//     lastProcessedDay: lastProcessedDay
+// });
+//         assertEq(schedule.totalAmount, 50 ether);
+//     }
+
+//     /**
+//      * @dev Test full revocation of a vesting schedule
+//      */
+//     function testFullRevoke() public {
+//                 DIAMVesting.BatchVestingParams[] memory params = new DIAMVesting.BatchVestingParams[](1);
+//         params[0] = DIAMVesting.BatchVestingParams({
+//             beneficiary: beneficiary,
+//             totalAmount: 100 ether,
+//             cliffPeriod: 1,
+//             vestingPeriod: 12,
+//             vestingType: DIAMVesting.VestingType.SimpleCliff,
+//             releasePercentage: 10
+//         });
+
+//         // Create batch vesting schedules
+//         vm.prank(_InitAdmin);
+//         vesting.createBatchVestingSchedules(params);
+
+//         uint256[] memory schedules = vesting.getBeneficiarySchedules(beneficiary);
+//         uint256 scheduleId = schedules[0];
+
+//         // Fully revoke the schedule
+//         vm.prank(_InitAdmin);
+//         vesting.revokeSchedule(scheduleId);
+
+//         // Verify the schedule is inactive
+//         (
+//     uint256 _scheduleId,
+//     address _beneficiary,
+//     uint256 totalAmount,
+//     uint256 cliffPeriod,
+//     uint256 vestingPeriod,
+//     DIAMVesting.VestingType vestingType,
+//     uint256 releasePercentage,
+//     uint256 startTime,
+//     uint256 releasedAmount,
+//     bool isActive,
+//     uint256 lastProcessedDay
+// ) = vesting.vestingSchedules(scheduleId);
+
+// DIAMVesting.VestingSchedule memory schedule = DIAMVesting.VestingSchedule({
+//     scheduleId: _scheduleId,
+//     beneficiary: _beneficiary,
+//     totalAmount: totalAmount,
+//     cliffPeriod: cliffPeriod,
+//     vestingPeriod: vestingPeriod,
+//     vestingType: vestingType,
+//     releasePercentage: releasePercentage,
+//     startTime: startTime,
+//     releasedAmount: releasedAmount,
+//     isActive: isActive,
+//     lastProcessedDay: lastProcessedDay
+// });
+//         assertFalse(schedule.isActive);
+//     }
+
+    // // Test if only the admin can grant and revoke roles
+    // function testgiveAccessToOtherMultipleAccountsAndCreateVestingAndReleaseAndRevoke()
+    //     public
+    // {
+    //     vm.prank(admin);
+    //     token.transfer(address(3), 5 ether);
+
+    //     vm.prank(admin);
+    //     vesting.grantRole(vesting.ADMIN_ROLE(), address(2));
+
+    //     vm.prank(admin);
+    //     vesting.grantRole(vesting.ADMIN_ROLE(), address(3));
+
+    //     console.log(address(4), address(5), address(6), address(7));
+    //     vm.prank(admin);
+    //     vesting.grantRole(vesting.ADMIN_ROLE(), address(3));
+
+    //     vm.prank(admin);
+    //     token.transfer(address(2), 5 ether);
+
+    //     vm.prank(admin);
+    //     vesting.grantRole(vesting.ADMIN_ROLE(), address(2));
+
+    //     console.log(
+    //         vesting.hasRole(vesting.ADMIN_ROLE(), address(2)),
+    //         " ICP PPPPPPPPPP"
+    //     );
+
+    //     // Verify that the new address has the role
+    //     assertTrue(vesting.hasRole(vesting.ADMIN_ROLE(), address(2)));
+    //     assertTrue(vesting.hasRole(vesting.ADMIN_ROLE(), address(3)));
+
+    //     console.log("corssed zero");
+    //     vm.prank(address(2));
+    //     token.approve(address(vesting), 100 ether);
+    //     vm.prank(address(2));
+    //     console.log(address(4));
+    //     DIAMVesting.BatchVestingParams[]
+    //         memory params = new DIAMVesting.BatchVestingParams[](2);
+    //     params[0] = DIAMVesting.BatchVestingParams({
+    //         beneficiary: address(4),
+    //         totalAmount: 1,
+    //         cliffPeriod: 1, // 1-month cliff
+    //         vestingPeriod: 12,
+    //         vestingType: DIAMVesting.VestingType.SimpleCliff,
+    //         releasePercentage: 10
+    //     });
+
+    //     params[1] = DIAMVesting.BatchVestingParams({
+    //         beneficiary: address(5),
+    //         totalAmount: 1 ether,
+    //         cliffPeriod: 1,
+    //         vestingPeriod: 24,
+    //         vestingType: DIAMVesting.VestingType.LinearCliff,
+    //         releasePercentage: 20
+    //     });
+    //     vesting.createBatchVestingSchedules(params);
+
+    //     console.log("corssed one");
+
+    //     vm.prank(address(3));
+    //     token.approve(address(vesting), 100 ether);
+    //     vm.prank(address(3));
+
+    //     DIAMVesting.BatchVestingParams[]
+    //         memory params2 = new DIAMVesting.BatchVestingParams[](2);
+    //     params2[0] = DIAMVesting.BatchVestingParams({
+    //         beneficiary: address(6),
+    //         totalAmount: 1,
+    //         cliffPeriod: 1, // 1-month cliff
+    //         vestingPeriod: 12,
+    //         vestingType: DIAMVesting.VestingType.SimpleCliff,
+    //         releasePercentage: 10
+    //     });
+
+    //     params2[1] = DIAMVesting.BatchVestingParams({
+    //         beneficiary: address(7),
+    //         totalAmount: 1 ether,
+    //         cliffPeriod: 1,
+    //         vestingPeriod: 24,
+    //         vestingType: DIAMVesting.VestingType.LinearCliff,
+    //         releasePercentage: 20
+    //     });
+
+    //     // Create batch vesting schedules
+    //     // vm.prank(admin);
+    //     vesting.createBatchVestingSchedules(params2);
+
+    //     vm.warp(block.timestamp + 31 days);
+
+    //     uint256[] memory schedules = vesting.getBeneficiarySchedules(
+    //         address(7)
+    //     );
+    //     uint256 scheduleId = schedules[0];
+    //     console.log("Schedule ID:", scheduleId);
+
+    //     uint256[] memory schedules1 = vesting.getBeneficiarySchedules(
+    //         address(6)
+    //     );
+    //     // uint256 scheduleId = schedules[0];
+    //     // console.log("Schedule ID:", scheduleId);
+
+    //     // Process token releases
+    //     vm.prank(address(2));
+    //     vesting.processTokenReleases(schedules);
+    //     vm.prank(address(2));
+    //     vesting.processTokenReleases(schedules1);
+
+    //     uint256[] memory schedules2 = vesting.getBeneficiarySchedules(
+    //         address(5)
+    //     );
+    //     uint256[] memory schedules3 = vesting.getBeneficiarySchedules(
+    //         address(4)
+    //     );
+
+    //     // DIAMVesting.VestingSchedule memory a = vesting.getVestingSchedule(schedules2[0]);
+
+    //     // assertGt(a.releasedAmount, 0);
+
+    //     //     DIAMVesting.VestingSchedule memory b= vesting.getVestingSchedule(schedules3[0]);
+
+    //     // assertGt(b.releasedAmount, 0);
+    //     // uint256 scheduleId = schedules[0];
+    //     // console.log("Schedule ID:", scheduleId);
+
+    //     vm.prank(address(3));
+    //     vesting.processTokenReleases(schedules2);
+    //     vm.prank(address(3));
+    //     vesting.processTokenReleases(schedules3);
+
+    //     // Verify tokens have been released
+    //     DIAMVesting.VestingSchedule memory schedule = vesting
+    //         .getVestingSchedule(2);
+    //     console.log("Released Amount:", schedule.releasedAmount);
+    //     assertGt(schedule.releasedAmount, 0);
+    //     DIAMVesting.VestingSchedule memory schedule1 = vesting
+    //         .getVestingSchedule(3);
+    //     console.log("Released Amount:", schedule1.releasedAmount);
+    //     assertGt(schedule.releasedAmount, 0);
+    //     DIAMVesting.VestingSchedule memory schedule2 = vesting
+    //         .getVestingSchedule(4);
+    //     console.log("Released Amount:", schedule2.releasedAmount);
+    //     assertGt(schedule.releasedAmount, 0);
+    //     DIAMVesting.VestingSchedule memory schedule3 = vesting
+    //         .getVestingSchedule(5);
+    //     console.log("Released Amount:", schedule3.releasedAmount);
+    //     assertGt(schedule.releasedAmount, 0);
+
+
+    //     // vm.prank(admin)
+    // }
+
+  
+
+    // function testgiveAccessToOtherMultipleAccountsAndCreateVestingAndRelease()
+    //     public
+    // {
+    //     vm.prank(admin);
+    //     token.transfer(address(3), 5 ether);
+
+    //     vm.prank(admin);
+    //     vesting.grantRole(vesting.ADMIN_ROLE(), address(2));
+
+    //     vm.prank(admin);
+    //     vesting.grantRole(vesting.ADMIN_ROLE(), address(3));
+
+    //     console.log(address(4), address(5), address(6), address(7));
+    //     vm.prank(admin);
+    //     vesting.grantRole(vesting.ADMIN_ROLE(), address(3));
+
+    //     vm.prank(admin);
+    //     token.transfer(address(2), 5 ether);
+
+    //     vm.prank(admin);
+    //     vesting.grantRole(vesting.ADMIN_ROLE(), address(2));
+
+    //     console.log(
+    //         vesting.hasRole(vesting.ADMIN_ROLE(), address(2)),
+    //         " ICP PPPPPPPPPP"
+    //     );
+
+    //     // Verify that the new address has the role
+    //     assertTrue(vesting.hasRole(vesting.ADMIN_ROLE(), address(2)));
+    //     assertTrue(vesting.hasRole(vesting.ADMIN_ROLE(), address(3)));
+
+    //     console.log("corssed zero");
+    //     vm.prank(address(2));
+    //     token.approve(address(vesting), 100 ether);
+    //     vm.prank(address(2));
+    //     console.log(address(4));
+    //     DIAMVesting.BatchVestingParams[]
+    //         memory params = new DIAMVesting.BatchVestingParams[](2);
+    //     params[0] = DIAMVesting.BatchVestingParams({
+    //         beneficiary: address(4),
+    //         totalAmount: 1,
+    //         cliffPeriod: 1, // 1-month cliff
+    //         vestingPeriod: 12,
+    //         vestingType: DIAMVesting.VestingType.SimpleCliff,
+    //         releasePercentage: 10
+    //     });
+
+    //     params[1] = DIAMVesting.BatchVestingParams({
+    //         beneficiary: address(5),
+    //         totalAmount: 1 ether,
+    //         cliffPeriod: 1,
+    //         vestingPeriod: 24,
+    //         vestingType: DIAMVesting.VestingType.LinearCliff,
+    //         releasePercentage: 20
+    //     });
+    //     vesting.createBatchVestingSchedules(params);
+
+    //     console.log("corssed one");
+
+    //     vm.prank(address(3));
+    //     token.approve(address(vesting), 100 ether);
+    //     vm.prank(address(3));
+
+    //     DIAMVesting.BatchVestingParams[]
+    //         memory params2 = new DIAMVesting.BatchVestingParams[](2);
+    //     params2[0] = DIAMVesting.BatchVestingParams({
+    //         beneficiary: address(6),
+    //         totalAmount: 1,
+    //         cliffPeriod: 1, // 1-month cliff
+    //         vestingPeriod: 12,
+    //         vestingType: DIAMVesting.VestingType.SimpleCliff,
+    //         releasePercentage: 10
+    //     });
+
+    //     params2[1] = DIAMVesting.BatchVestingParams({
+    //         beneficiary: address(7),
+    //         totalAmount: 1 ether,
+    //         cliffPeriod: 1,
+    //         vestingPeriod: 24,
+    //         vestingType: DIAMVesting.VestingType.LinearCliff,
+    //         releasePercentage: 20
+    //     });
+
+    //     // Create batch vesting schedules
+    //     // vm.prank(admin);
+    //     vesting.createBatchVestingSchedules(params2);
+
+    //     vm.warp(block.timestamp + 31 days);
+
+    //     uint256[] memory schedules = vesting.getBeneficiarySchedules(
+    //         address(7)
+    //     );
+    //     uint256 scheduleId = schedules[0];
+    //     console.log("Schedule ID:", scheduleId);
+
+    //     uint256[] memory schedules1 = vesting.getBeneficiarySchedules(
+    //         address(6)
+    //     );
+    //     // uint256 scheduleId = schedules[0];
+    //     // console.log("Schedule ID:", scheduleId);
+
+    //     // Process token releases
+    //     vm.prank(address(2));
+    //     vesting.processTokenReleases(schedules);
+    //     vm.prank(address(2));
+    //     vesting.processTokenReleases(schedules1);
+
+    //     uint256[] memory schedules2 = vesting.getBeneficiarySchedules(
+    //         address(5)
+    //     );
+    //     uint256[] memory schedules3 = vesting.getBeneficiarySchedules(
+    //         address(4)
+    //     );
+
+    //     // DIAMVesting.VestingSchedule memory a = vesting.getVestingSchedule(schedules2[0]);
+
+    //     // assertGt(a.releasedAmount, 0);
+
+    //     //     DIAMVesting.VestingSchedule memory b= vesting.getVestingSchedule(schedules3[0]);
+
+    //     // assertGt(b.releasedAmount, 0);
+    //     // uint256 scheduleId = schedules[0];
+    //     // console.log("Schedule ID:", scheduleId);
+
+    //     vm.prank(address(3));
+    //     vesting.processTokenReleases(schedules2);
+    //     vm.prank(address(3));
+    //     vesting.processTokenReleases(schedules3);
+
+    //     // Verify tokens have been released
+    //     DIAMVesting.VestingSchedule memory schedule = vesting
+    //         .getVestingSchedule(2);
+    //     console.log("Released Amount:", schedule.releasedAmount);
+    //     assertGt(schedule.releasedAmount, 0);
+    //     DIAMVesting.VestingSchedule memory schedule1 = vesting
+    //         .getVestingSchedule(3);
+    //     console.log("Released Amount:", schedule1.releasedAmount);
+    //     assertGt(schedule.releasedAmount, 0);
+    //     DIAMVesting.VestingSchedule memory schedule2 = vesting
+    //         .getVestingSchedule(4);
+    //     console.log("Released Amount:", schedule2.releasedAmount);
+    //     assertGt(schedule.releasedAmount, 0);
+    //     DIAMVesting.VestingSchedule memory schedule3 = vesting
+    //         .getVestingSchedule(5);
+    //     console.log("Released Amount:", schedule3.releasedAmount);
+    //     assertGt(schedule.releasedAmount, 0);
+    // }
+
+
+
+    //  function testAccessControl() public {
+    //     // Ensure only the admin can grant roles
+    //     vm.expectRevert("AccessControl: sender must be an admin to grant");
+    //     vm.prank(address(3)); // Trying from a non-admin address
+    //     vesting.grantRole(vesting.ADMIN_ROLE(), address(2));
+
+    //     // Grant the role from the admin
+    //     vm.prank(admin);
+    //     vesting.grantRole(vesting.ADMIN_ROLE(), address(2));
+
+    //     // Verify that the new address has the role
+    //     assertTrue(vesting.hasRole(vesting.ADMIN_ROLE(), address(2)));
+    // }
+}

@@ -1,0 +1,108 @@
+Script started on 2025-01-23 05:43:29+00:00 [TERM="xterm-256color" TTY="/dev/pts/7" COLUMNS="212" LINES="18"]
+'solc --version' running
+'solc main.sol --combined-json abi,ast,bin,bin-runtime,srcmap,srcmap-runtime,userdoc,devdoc,hashes --allow-paths .,/home/ubuntu/solidity/sample-contract/hlo/src' running
+INFO:Detectors:[91m
+Math.mulDiv(uint256,uint256,uint256) (main.sol#3364-3443) has bitwise-xor operator ^ instead of the exponentiation operator **: 
+	 - inverse = (3 * denominator) ^ 2 (main.sol#3425)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#incorrect-exponentiation[0m
+INFO:Detectors:[93m
+Math.mulDiv(uint256,uint256,uint256) (main.sol#3364-3443) performs a multiplication on the result of a division:
+	- denominator = denominator / twos (main.sol#3410)
+	- inverse = (3 * denominator) ^ 2 (main.sol#3425)
+Math.mulDiv(uint256,uint256,uint256) (main.sol#3364-3443) performs a multiplication on the result of a division:
+	- denominator = denominator / twos (main.sol#3410)
+	- inverse *= 2 - denominator * inverse (main.sol#3429)
+Math.mulDiv(uint256,uint256,uint256) (main.sol#3364-3443) performs a multiplication on the result of a division:
+	- denominator = denominator / twos (main.sol#3410)
+	- inverse *= 2 - denominator * inverse (main.sol#3430)
+Math.mulDiv(uint256,uint256,uint256) (main.sol#3364-3443) performs a multiplication on the result of a division:
+	- denominator = denominator / twos (main.sol#3410)
+	- inverse *= 2 - denominator * inverse (main.sol#3431)
+Math.mulDiv(uint256,uint256,uint256) (main.sol#3364-3443) performs a multiplication on the result of a division:
+	- denominator = denominator / twos (main.sol#3410)
+	- inverse *= 2 - denominator * inverse (main.sol#3432)
+Math.mulDiv(uint256,uint256,uint256) (main.sol#3364-3443) performs a multiplication on the result of a division:
+	- denominator = denominator / twos (main.sol#3410)
+	- inverse *= 2 - denominator * inverse (main.sol#3433)
+Math.mulDiv(uint256,uint256,uint256) (main.sol#3364-3443) performs a multiplication on the result of a division:
+	- denominator = denominator / twos (main.sol#3410)
+	- inverse *= 2 - denominator * inverse (main.sol#3434)
+Math.mulDiv(uint256,uint256,uint256) (main.sol#3364-3443) performs a multiplication on the result of a division:
+	- prod0 = prod0 / twos (main.sol#3413)
+	- result = prod0 * inverse (main.sol#3440)
+Math.invMod(uint256,uint256) (main.sol#3463-3509) performs a multiplication on the result of a division:
+	- quotient = gcd / remainder (main.sol#3485)
+	- (gcd,remainder) = (remainder,gcd - remainder * quotient) (main.sol#3487-3494)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#divide-before-multiply[0m
+INFO:Detectors:[92m
+DIAMVesting._processScheduleRelease(uint256) (main.sol#4338-4361) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(msg.sender == schedule.beneficiary,Unauteehorized) (main.sol#4343)
+	- require(bool,string)(schedule.isActive,Schedule not active) (main.sol#4345)
+	- releasableAmount > 0 (main.sol#4349)
+DIAMVesting.calculateReleasableAmount(DIAMVesting.VestingSchedule) (main.sol#4366-4387) uses timestamp for comparisons
+	Dangerous comparisons:
+	- block.timestamp < cliffEndTime (main.sol#4374)
+	- elapsedTime >= vestingDuration (main.sol#4380)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#block-timestamp[0m
+INFO:Detectors:[92m
+Panic.panic(uint256) (main.sol#159-165) uses assembly
+	- INLINE ASM (main.sol#160-164)
+SafeCast.toUint(bool) (main.sol#1435-1439) uses assembly
+	- INLINE ASM (main.sol#1436-1438)
+console._sendLogPayloadImplementation(bytes) (main.sol#1448-1463) uses assembly
+	- INLINE ASM (main.sol#1451-1462)
+console._castToPure(function(bytes)) (main.sol#1465-1471) uses assembly
+	- INLINE ASM (main.sol#1468-1470)
+Math.mulDiv(uint256,uint256,uint256) (main.sol#3364-3443) uses assembly
+	- INLINE ASM (main.sol#3371-3374)
+	- INLINE ASM (main.sol#3395-3402)
+	- INLINE ASM (main.sol#3408-3417)
+Math.tryModExp(uint256,uint256,uint256) (main.sol#3557-3581) uses assembly
+	- INLINE ASM (main.sol#3559-3580)
+Math.tryModExp(bytes,bytes,bytes) (main.sol#3597-3619) uses assembly
+	- INLINE ASM (main.sol#3609-3618)
+Math.log2(uint256) (main.sol#3760-3799) uses assembly
+	- INLINE ASM (main.sol#3796-3798)
+SafeERC20._callOptionalReturn(IERC20,bytes) (main.sol#4136-4154) uses assembly
+	- INLINE ASM (main.sol#4139-4149)
+SafeERC20._callOptionalReturnBool(IERC20,bytes) (main.sol#4164-4174) uses assembly
+	- INLINE ASM (main.sol#4168-4172)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#assembly-usage[0m
+INFO:Detectors:[92m
+DIAMVesting._createVestingSchedule(DIAMVesting.BatchVestingParams) (main.sol#4287-4317) has costly operations inside a loop:
+	- scheduleId = nextScheduleId ++ (main.sol#4290)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#costly-operations-inside-a-loop[0m
+INFO:Detectors:[92m
+Context._contextSuffixLength() (main.sol#106-108) is never used and should be removed
+Context._msgData() (main.sol#102-104) is never used and should be removed
+Pausable._pause() (main.sol#3207-3210) is never used and should be removed
+Pausable._requirePaused() (main.sol#3194-3198) is never used and should be removed
+Pausable._unpause() (main.sol#3219-3222) is never used and should be removed
+ReentrancyGuard._reentrancyGuardEntered() (main.sol#250-252) is never used and should be removed
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#dead-code[0m
+INFO:Detectors:[92m
+Version constraint <0.9.0>=0.4.22^0.8.19^0.8.20 is too complex.
+It is used by:
+	- <0.9.0>=0.4.22^0.8.19^0.8.20 (main.sol#2)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#incorrect-versions-of-solidity[0m
+INFO:Detectors:[92m
+Contract console (main.sol#1444-3000) is not in CapWords
+Parameter DIAMVesting.createBatchVestingSchedules(DIAMVesting.BatchVestingParams[])._params (main.sol#4261) is not in mixedCase
+Parameter DIAMVesting.calculateTotalAmount(DIAMVesting.BatchVestingParams[])._params (main.sol#4274) is not in mixedCase
+Parameter DIAMVesting.processTokenReleases(uint256[])._scheduleIds (main.sol#4322) is not in mixedCase
+Parameter DIAMVesting.getBeneficiarySchedules(address)._beneficiary (main.sol#4393) is not in mixedCase
+Parameter DIAMVesting.partialRevoke(uint256,uint256)._scheduleId (main.sol#4402) is not in mixedCase
+Parameter DIAMVesting.partialRevoke(uint256,uint256)._amount (main.sol#4403) is not in mixedCase
+Parameter DIAMVesting.revokeSchedule(uint256)._scheduleId (main.sol#4439) is not in mixedCase
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#conformance-to-solidity-naming-conventions[0m
+INFO:Detectors:[92m
+Math.log2(uint256) (main.sol#3760-3799) uses literals with too many digits:
+	- r = r | byte(uint256,uint256)(x >> r,0x0000010102020202030303030303030300000000000000000000000000000000) (main.sol#3797)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#too-many-digits[0m
+INFO:Detectors:[92m
+DIAMVesting.diamToken (main.sol#4223) should be immutable 
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#state-variables-that-could-be-declared-immutable[0m
+INFO:Slither:main.sol analyzed (13 contracts with 93 detectors), 40 result(s) found
+[0m
+Script done on 2025-01-23 05:43:33+00:00 [COMMAND_EXIT_CODE="255"]
